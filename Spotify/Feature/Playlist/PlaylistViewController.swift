@@ -48,8 +48,10 @@ class PlaylistViewController: UIViewController {
             self?.pushToAddBottomSheet()
         }
         
-        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { [weak self] (traitEnvironment: Self, previousTraitCollection) in
-            self?.root.setupLayers()
+        if #available(iOS 17.0, *) {
+            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { [weak self] (traitEnvironment: Self, previousTraitCollection) in
+                self?.root.setupLayers()
+            }
         }
     }
     
@@ -59,6 +61,11 @@ class PlaylistViewController: UIViewController {
         root.setupGeometry()
         root.setupLayers()
         root.transitionLayout(to: viewModel.playlistViewType)
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        self.root.setupLayers()
     }
     
     @objc private func togglePlaylistView() {

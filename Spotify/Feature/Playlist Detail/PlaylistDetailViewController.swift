@@ -53,11 +53,19 @@ final class PlaylistDetailViewController: UIViewController {
             self?.navigationController?.present(vc, animated: true)
         }
         
-        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { [weak self] (traitEnvironment: Self, previousTraitCollection) in
-            self?.root.setupLayers()
+        
+        if #available(iOS 17.0, *) {
+            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { [weak self] (traitEnvironment: Self, previousTraitCollection) in
+                self?.root.setupLayers()
+            }
         }
         
         root.songsCollectionView.dataSource = self
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        self.root.setupLayers()
     }
     
     override func viewDidLayoutSubviews() {
